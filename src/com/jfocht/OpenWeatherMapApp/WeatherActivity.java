@@ -22,6 +22,22 @@ public class WeatherActivity extends Activity
         setContentView(R.layout.main);
 
         registerCallbacks();
+        restoreState(savedInstanceState);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+      super.onSaveInstanceState(savedInstanceState);
+
+      savedInstanceState.putString("Weather", getWeather().getText().toString());
+    }
+
+    public void restoreState(Bundle savedInstanceState) {
+        if (savedInstanceState == null) return;
+
+        if (savedInstanceState.containsKey("Weather")) {
+            getWeather().setText(savedInstanceState.getString("Weather"));
+        }
     }
 
     private EditText getLocation() {
