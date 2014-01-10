@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">WeatherActivity</string>
+    <string name="app_name">Open Weather Map API Client</string>
+    <string name="location_hint">Location (e.g. 55426; St Louis Park, MN)</string>
+    <string name="done">Done</string>
+    <string name="weather_empty_text">No Weather Yet!</string>
 </resources>
