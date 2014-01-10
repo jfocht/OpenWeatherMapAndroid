@@ -1,6 +1,5 @@
 package com.jfocht.OpenWeatherMapApp;
 
-
 import java.io.BufferedInputStream;
 import java.io.InputStream;
 import java.io.StringWriter;

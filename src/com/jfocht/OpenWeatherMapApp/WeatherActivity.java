@@ -4,6 +4,7 @@ import java.io.StringWriter;
 import java.io.PrintWriter;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -18,6 +19,8 @@ public class WeatherActivity extends Activity
     private static final String DEGREES_F = "\u00b0F";
 
     private OpenWeatherMapService weatherService = new OpenWeatherMapService();
+
+    private ProgressDialog progress;
 
     /** Called when the activity is first created. */
     @Override
@@ -104,10 +107,12 @@ public class WeatherActivity extends Activity
         sb.append(weather.getLowTemperature());
         sb.append(DEGREES_F);
         getWeather().setText(sb.toString());
+        clearProgressMaybe();
     }
 
     private void displayError(Exception e) {
         String msg;
+        clearProgressMaybe();
         if (e == null) {
             msg = "Unknown error";
         } else if (e instanceof OpenWeatherMapException) {
@@ -120,9 +125,20 @@ public class WeatherActivity extends Activity
         getWeather().setText(msg);
     }
 
+    private void clearProgressMaybe() {
+        if (progress != null) {
+            progress.dismiss();
+            progress = null;
+        }
+    }
+
     private void updateWeather()
     {
         String city = getLocation().getText().toString();
+        progress = new ProgressDialog(this);
+        progress.setTitle("Loading");
+        progress.setMessage(String.format("Loading weather for %s", city));
+        progress.show();
         weatherService.fetchWeatherInBackground(city, new WeatherCallback());
     }
 }
