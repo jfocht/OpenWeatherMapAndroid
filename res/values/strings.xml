@@ -7,4 +7,6 @@
     <string name="temp_now">Right Now:</string>
     <string name="temp_high">High:</string>
     <string name="temp_low">Low:</string>
+    <string name="loading">Loading</string>
+    <string name="loading_weather_fmt">Loading weather for %s</string>
 </resources>

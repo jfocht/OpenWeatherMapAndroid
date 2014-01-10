@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Open Weather Map API Client</string>
+    <string name="location_hint">Ubicación (Madrid)</string>
+    <string name="done">Buscar</string>
+    <string name="weather_empty_text">Nada tiempo ahora</string>
+    <string name="temp_now">Ahora:</string>
+    <string name="temp_high">Máximo:</string>
+    <string name="temp_low">Mínimo:</string>
+    <string name="loading">Cargando</string>
+    <string name="loading_weather_fmt">Cargando tiempo para %s</string>
+</resources>

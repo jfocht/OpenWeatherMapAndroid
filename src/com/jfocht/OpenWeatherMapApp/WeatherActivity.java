@@ -142,8 +142,8 @@ public class WeatherActivity extends Activity
     {
         String city = getLocation().getText().toString();
         progress = new ProgressDialog(this);
-        progress.setTitle("Loading");
-        progress.setMessage(String.format("Loading weather for %s", city));
+        progress.setTitle(getString(R.string.loading));
+        progress.setMessage(String.format(getString(R.string.loading_weather_fmt), city));
         progress.show();
         weatherService.fetchWeatherInBackground(city, new WeatherCallback());
     }
