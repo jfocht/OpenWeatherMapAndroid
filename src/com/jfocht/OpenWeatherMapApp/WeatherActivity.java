@@ -1,5 +1,8 @@
 package com.jfocht.OpenWeatherMapApp;
 
+import java.io.StringWriter;
+import java.io.PrintWriter;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -12,7 +15,9 @@ import android.widget.TextView;
 public class WeatherActivity extends Activity
 {
 
-    private UpdateWeatherTask updateWeatherTask = null;
+    private static final String DEGREES_F = "\u00b0F";
+
+    private OpenWeatherMapService weatherService = new OpenWeatherMapService();
 
     /** Called when the activity is first created. */
     @Override
@@ -73,24 +78,51 @@ public class WeatherActivity extends Activity
         }
     }
 
-    private class WeatherCompleteListener implements UpdateWeatherTask.OnCompleteListener
+    private class WeatherCallback implements OpenWeatherMapService.WeatherCallback
     {
-        public void onComplete(String weather) {
-            displayWeather(weather);
+        public void done(Weather weather, Exception e) {
+            if (weather != null) {
+                displayWeather(weather);
+            } else {
+                displayError(e);
+            }
         }
     }
 
-    public void displayWeather(String weather)
+    private void displayWeather(Weather weather)
     {
-        getWeather().setText(weather);
+        StringBuilder sb = new StringBuilder();
+        sb.append(weather.getCityName());
+        sb.append("\n");
+        sb.append("Right Now: ");
+        sb.append(weather.getCurrentTemperature());
+        sb.append(DEGREES_F);
+        sb.append("\nHigh: ");
+        sb.append(weather.getHighTemperature());
+        sb.append(DEGREES_F);
+        sb.append("\nLow: ");
+        sb.append(weather.getLowTemperature());
+        sb.append(DEGREES_F);
+        getWeather().setText(sb.toString());
+    }
+
+    private void displayError(Exception e) {
+        String msg;
+        if (e == null) {
+            msg = "Unknown error";
+        } else if (e instanceof OpenWeatherMapException) {
+            msg = e.getMessage();
+        } else {
+            StringWriter sw = new StringWriter();
+            e.printStackTrace(new PrintWriter(sw));
+            msg = sw.toString();
+        }
+        getWeather().setText(msg);
     }
 
     private void updateWeather()
     {
-        if (updateWeatherTask != null) {
-            updateWeatherTask.cancel(true);
-        }
-        updateWeatherTask = new UpdateWeatherTask(new WeatherCompleteListener());
-        updateWeatherTask.execute(getLocation().getText().toString());
+        String city = getLocation().getText().toString();
+        weatherService.fetchWeatherInBackground(city, new WeatherCallback());
     }
 }
