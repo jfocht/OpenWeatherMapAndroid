@@ -11,6 +11,7 @@ import java.util.Scanner;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -26,6 +27,8 @@ public class WeatherActivity extends Activity
         "http://api.openweathermap.org/data/2.5/weather?q=%s&units=imperial";
 
     private static final String DEGREES_F = "\u00b0F";
+
+    private UpdateWeatherTask updateWeatherTask = null;
 
     /** Called when the activity is first created. */
     @Override
@@ -51,11 +54,23 @@ public class WeatherActivity extends Activity
 
     private void registerCallbacks()
     {
-        getButton().setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                updateWeather();
-            }
-        });
+        getButton().setOnClickListener(new DoneListener());
+        getLocation().setOnEditorActionListener(new EnterListener());
+    }
+
+    private class DoneListener implements View.OnClickListener
+    {
+        public void onClick(View v) {
+            updateWeather();
+        }
+    }
+
+    private class EnterListener implements TextView.OnEditorActionListener
+    {
+        public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+            updateWeather();
+            return true;
+        }
     }
 
     public void displayWeather(String weather)
@@ -65,7 +80,11 @@ public class WeatherActivity extends Activity
 
     private void updateWeather()
     {
-        new UpdateWeatherTask().execute(getLocation().getText().toString());
+        if (updateWeatherTask != null) {
+            updateWeatherTask.cancel(true);
+        }
+        updateWeatherTask = new UpdateWeatherTask();
+        updateWeatherTask.execute(getLocation().getText().toString());
     }
 
     private class UpdateWeatherTask extends AsyncTask<String, Void, String> {

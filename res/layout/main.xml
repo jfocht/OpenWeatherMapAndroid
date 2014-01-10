@@ -15,6 +15,9 @@
         android:layout_toLeftOf="@+id/done"
         android:ellipsize="end"
         android:lines="1"
+        android:singleLine="true"
+        android:imeOptions="actionDone"
+        android:autoText="false"
         android:hint="@string/location_hint" />
     <Button
         android:id="@+id/done" 
