@@ -4,4 +4,7 @@
     <string name="location_hint">Location (e.g. 55426; St Louis Park, MN)</string>
     <string name="done">Done</string>
     <string name="weather_empty_text">No Weather Yet!</string>
+    <string name="temp_now">Right Now:</string>
+    <string name="temp_high">High:</string>
+    <string name="temp_low">Low:</string>
 </resources>

@@ -16,8 +16,6 @@ import android.widget.TextView;
 public class WeatherActivity extends Activity
 {
 
-    private static final String DEGREES_F = "\u00b0F";
-
     private OpenWeatherMapService weatherService = new OpenWeatherMapService();
 
     private ProgressDialog progress;
@@ -37,14 +35,24 @@ public class WeatherActivity extends Activity
     public void onSaveInstanceState(Bundle savedInstanceState) {
       super.onSaveInstanceState(savedInstanceState);
 
-      savedInstanceState.putString("Weather", getWeather().getText().toString());
+      savedInstanceState.putString(
+              "Current", getCurrentTempTextView().getText().toString());
+      savedInstanceState.putString(
+              "High", getHighTempTextView().getText().toString());
+      savedInstanceState.putString(
+              "Low", getLowTempTextView().getText().toString());
     }
 
     public void restoreState(Bundle savedInstanceState) {
         if (savedInstanceState == null) return;
 
-        if (savedInstanceState.containsKey("Weather")) {
-            getWeather().setText(savedInstanceState.getString("Weather"));
+        if (savedInstanceState.containsKey("Current")) {
+            getCurrentTempTextView().setText(
+                    savedInstanceState.getString("Current"));
+            getHighTempTextView().setText(
+                    savedInstanceState.getString("High"));
+            getLowTempTextView().setText(
+                    savedInstanceState.getString("Low"));
         }
     }
 
@@ -52,12 +60,20 @@ public class WeatherActivity extends Activity
         return (EditText) findViewById(R.id.location);
     }
 
-    private TextView getWeather() {
-        return (TextView) findViewById(R.id.weather);
-    }
-
     private Button getButton() {
         return (Button) findViewById(R.id.done);
+    }
+
+    private TextView getCurrentTempTextView() {
+        return (TextView) findViewById(R.id.textViewTempNow);
+    }
+
+    private TextView getHighTempTextView() {
+        return (TextView) findViewById(R.id.textViewTempHigh);
+    }
+
+    private TextView getLowTempTextView() {
+        return (TextView) findViewById(R.id.textViewTempLow);
     }
 
     private void registerCallbacks()
@@ -94,19 +110,9 @@ public class WeatherActivity extends Activity
 
     private void displayWeather(Weather weather)
     {
-        StringBuilder sb = new StringBuilder();
-        sb.append(weather.getCityName());
-        sb.append("\n");
-        sb.append("Right Now: ");
-        sb.append(weather.getCurrentTemperature());
-        sb.append(DEGREES_F);
-        sb.append("\nHigh: ");
-        sb.append(weather.getHighTemperature());
-        sb.append(DEGREES_F);
-        sb.append("\nLow: ");
-        sb.append(weather.getLowTemperature());
-        sb.append(DEGREES_F);
-        getWeather().setText(sb.toString());
+        getCurrentTempTextView().setText(weather.getCurrentTemperature());
+        getHighTempTextView().setText(weather.getHighTemperature());
+        getLowTempTextView().setText(weather.getLowTemperature());
         clearProgressMaybe();
     }
 
@@ -122,7 +128,7 @@ public class WeatherActivity extends Activity
             e.printStackTrace(new PrintWriter(sw));
             msg = sw.toString();
         }
-        getWeather().setText(msg);
+        // TODO present an error message
     }
 
     private void clearProgressMaybe() {

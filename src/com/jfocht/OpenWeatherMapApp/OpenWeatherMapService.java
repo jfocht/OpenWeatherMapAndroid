@@ -37,6 +37,8 @@ class FetchWeatherTask extends AsyncTask<String, Void, Weather> {
 
     private final String endpoint;
 
+    private static final String DEGREES_F = "\u00b0F";
+
     private Exception failure;
 
     public FetchWeatherTask(String endpoint, OpenWeatherMapService.WeatherCallback callback) {
@@ -93,9 +95,9 @@ class FetchWeatherTask extends AsyncTask<String, Void, Weather> {
         if (mainResponse != null) {
             return new Weather(
                     object.optString("name"),
-                    mainResponse.optString("temp", "???"),
-                    mainResponse.optString("temp_max", "???"),
-                    mainResponse.optString("temp_min", "???"));
+                    mainResponse.optString("temp", "???") + DEGREES_F,
+                    mainResponse.optString("temp_max", "???") + DEGREES_F,
+                    mainResponse.optString("temp_min", "???") + DEGREES_F);
         }
         String errorMessage = object.optString(
                 "message", "Unknown response from server");
